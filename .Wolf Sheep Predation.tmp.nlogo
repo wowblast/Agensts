@@ -62,7 +62,10 @@ to go
     ]
     reproduce-sheep  ; sheep reproduce at random rate governed by slider
   ]
-  ask one-of sheep [create-group]
+  ask one-of sheep [create-leaders];; create leaders
+  ask sheep with [color = red][create-group]
+
+
   ask wolves [
     move
     set energy energy - 1  ; wolves lose energy as they move
@@ -93,7 +96,7 @@ end
 to reproduce-sheep  ; sheep procedure
   if random-float 100 < sheep-reproduce [  ; throw "dice" to see if you will reproduce
     set energy (energy / 2)                ; divide energy between parent and offspring
-    hatch 1 [ rt random-float 360 fd 1 set color  ]   ; hatch an offspring and move it forward 1 step
+    hatch 1 [ rt random-float 360 fd 1 set color white ]   ; hatch an offspring and move it forward 1 step
   ]
 end
 
@@ -148,10 +151,16 @@ end
 
 to create-group
 
-  if random-float 500 < intelligence[  ; throw "dice" to see if you will reproduce
-    set color red
+  ask turtles in-radius 2
+      [ set color red ]
 
-  ]
+
+end
+
+to create-leaders
+  if random-float 200 < intelligence[
+    set color ]
+
 end
 
 
@@ -284,7 +293,7 @@ grass-regrowth-time
 grass-regrowth-time
 0
 100
-100.0
+23.0
 1
 1
 NIL
@@ -427,7 +436,7 @@ intelligence
 intelligence
 1
 20
-14.0
+15.0
 1
 1
 NIL
