@@ -4,7 +4,8 @@ breed [ sheep a-sheep ]  ; sheep is its own plural, so we use "a-sheep" as the s
 breed [ wolves wolf ]
 turtles-own [ energy ]       ; both wolves and sheep have energy
 patches-own [ countdown ]
-sheep-own [security]
+sheep-own [security leader group-number]
+
 
 to setup
   clear-all
@@ -33,7 +34,10 @@ to setup
     set label-color blue - 2
     set energy random (2 * sheep-gain-from-food)
     setxy random-xcor random-ycor
-    set security 0
+    set security 1
+    set leader 0
+    set group-number 1
+
   ]
 
   create-wolves initial-number-wolves  ; create the wolves, then initialize their variables
@@ -62,9 +66,13 @@ to go
       death ; sheep die from starvation only if running sheep-wolf-grass model version
     ]
     reproduce-sheep  ; sheep reproduce at random rate governed by slider
+    ;;;;;;;;;;;;;;
+    if color = red  [create-group]
+    follow-leader
+    ;;;;;;;;;;;;;
   ]
-  ask one-of sheep [create-leaders];; create leaders
-  ask sheep with [color = red][create-group]
+  if any? sheep [ask one-of sheep with [color = white] [create-leaders]];; create leaders
+  ;;ask sheep with [color = red][create-group  ]
 
 
   ask wolves [
@@ -78,14 +86,20 @@ to go
   ; set grass count patches with [pcolor = green]
   tick
   display-labels
-   set-numberOfTurtles
+   ;set-numberOfTurtles
 end
 
-to move  ; turtle procedure
-  rt random 50
+to move  ; turtle
+  ifelse breed = sheep [  ifelse leader != 0 and leader != nobody and leader != self  [move-to leader
+   ]
+  [rt random 50
   lt random 50
-  fd 1
+    fd 1]]
+   [rt random 50
+  lt random 50
+    fd 1]
 end
+
 
 to eat-grass  ; sheep procedure
   ; sheep eat grass, turn the patch brown
@@ -146,22 +160,29 @@ end
 to display-labels
   ask turtles [ set label "" ]
   if show-energy? [
-    ask wolves [ set label round energy ]
-    if model-version = "sheep-wolves-grass" [ ask sheep [ set label round energy ] ]
+    ;;ask wolves [ set label round energy ]
+    if model-version != "sep-wolves-grass" [ ask sheep [ set label round security ] ]
   ]
 end
 
 to create-group
 
-  ask turtles in-radius 5
-      [ set color blue ]
+  ask sheep in-radius 5
+      [ if security = 1 [set leader myself
+        move-to self]
+         ]
+
+  set security count sheep with [leader = self]
+  ask sheep with [leader = self][set security [security] of myself]
 
 
 end
 
 to create-leaders
   if random-float 200 < intelligence[
-    set color red]
+    set color red
+
+    set leader self]
 
 end
 to set-numberOfTurtles
@@ -171,6 +192,11 @@ to set-numberOfTurtles
     [set plabel count turtles-here]
     [set plabel ""]
   ]
+
+end
+to follow-leader
+
+  if leader = nobody and security > 1 [ set security 1]
 
 end
 
@@ -213,7 +239,7 @@ initial-number-sheep
 initial-number-sheep
 0
 250
-96.0
+136.0
 1
 1
 NIL
@@ -258,7 +284,7 @@ initial-number-wolves
 initial-number-wolves
 0
 250
-50.0
+85.0
 1
 1
 NIL
@@ -423,7 +449,7 @@ SWITCH
 303
 show-energy?
 show-energy?
-1
+0
 1
 -1000
 
@@ -446,7 +472,7 @@ intelligence
 intelligence
 1
 20
-15.0
+20.0
 1
 1
 NIL
