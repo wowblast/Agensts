@@ -1,9 +1,10 @@
-gglobals [ max-sheep ]  ; don't let sheep population grow too large
+globals [ max-sheep ]  ; don't let sheep population grow too large
 ; Sheep and wolves are both breeds of turtle.
 breed [ sheep a-sheep ]  ; sheep is its own plural, so we use "a-sheep" as the singular.
 breed [ wolves wolf ]
 turtles-own [ energy ]       ; both wolves and sheep have energy
 patches-own [ countdown ]
+sheep-own [security]
 
 to setup
   clear-all
@@ -32,6 +33,7 @@ to setup
     set label-color blue - 2
     set energy random (2 * sheep-gain-from-food)
     setxy random-xcor random-ycor
+    set security 1
   ]
 
   create-wolves initial-number-wolves  ; create the wolves, then initialize their variables
@@ -102,8 +104,11 @@ to reproduce-wolves  ; wolf procedure
 end
 
 to eat-sheep  ; wolf procedure
-  let prey one-of sheep-here                    ; grab a random sheep
-  if prey != nobody  [                          ; did we get one?  if so,
+  let prey one-of sheep-here
+
+ ; let ind_security [security] of  prey one-of sheep
+  ; grab a random sheep
+  if prey != nobody and [security] of prey  5  [                          ; did we get one?  if so,
     ask prey [ die ]                            ; kill it, and...
     set energy energy + wolf-gain-from-food     ; get energy from eating
   ]
