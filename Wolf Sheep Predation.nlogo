@@ -4,6 +4,7 @@ breed [ sheep a-sheep ]  ; sheep is its own plural, so we use "a-sheep" as the s
 breed [ wolves wolf ]
 turtles-own [ energy ]       ; both wolves and sheep have energy
 patches-own [ countdown ]
+sheep-own [security]
 
 to setup
   clear-all
@@ -32,6 +33,7 @@ to setup
     set label-color blue - 2
     set energy random (2 * sheep-gain-from-food)
     setxy random-xcor random-ycor
+    set security 0
   ]
 
   create-wolves initial-number-wolves  ; create the wolves, then initialize their variables
@@ -60,6 +62,7 @@ to go
     ]
     reproduce-sheep  ; sheep reproduce at random rate governed by slider
   ]
+  ask one-of sheep [create-group]
   ask wolves [
     move
     set energy energy - 1  ; wolves lose energy as they move
@@ -90,20 +93,23 @@ end
 to reproduce-sheep  ; sheep procedure
   if random-float 100 < sheep-reproduce [  ; throw "dice" to see if you will reproduce
     set energy (energy / 2)                ; divide energy between parent and offspring
-    hatch 1 [ rt random-float 360 fd 1 ]   ; hatch an offspring and move it forward 1 step
+    hatch 1 [ rt random-float 360 fd 1 set color white ]   ; hatch an offspring and move it forward 1 step
   ]
 end
 
 to reproduce-wolves  ; wolf procedure
   if random-float 100 < wolf-reproduce [  ; throw "dice" to see if you will reproduce
     set energy (energy / 2)               ; divide energy between parent and offspring
-    hatch 1 [ rt random-float 360 fd 1 ]  ; hatch an offspring and move it forward 1 step
+    hatch 1 [ rt random-float 360 fd 1  ]  ; hatch an offspring and move it forward 1 step
   ]
 end
 
 to eat-sheep  ; wolf procedure
-  let prey one-of sheep-here                    ; grab a random sheep
-  if prey != nobody  [                          ; did we get one?  if so,
+  let prey one-of sheep-here
+
+ ; let ind_security [security] of  prey one-of sheep
+  ; grab a random sheep
+  if prey != nobody and [security] of prey < 5  [                          ; did we get one?  if so,
     ask prey [ die ]                            ; kill it, and...
     set energy energy + wolf-gain-from-food     ; get energy from eating
   ]
@@ -137,6 +143,14 @@ to display-labels
   if show-energy? [
     ask wolves [ set label round energy ]
     if model-version = "sheep-wolves-grass" [ ask sheep [ set label round energy ] ]
+  ]
+end
+
+to create-group
+
+  if random-float 200 < intelligence[  ; throw "dice" to see if you will reproduce
+    set color red
+
   ]
 end
 
@@ -180,7 +194,7 @@ initial-number-sheep
 initial-number-sheep
 0
 250
-100.0
+96.0
 1
 1
 NIL
@@ -270,7 +284,7 @@ grass-regrowth-time
 grass-regrowth-time
 0
 100
-30.0
+100.0
 1
 1
 NIL
@@ -384,9 +398,9 @@ Wolf settings
 0
 
 SWITCH
-105
+195
 270
-241
+331
 303
 show-energy?
 show-energy?
@@ -402,7 +416,22 @@ CHOOSER
 model-version
 model-version
 "sheep-wolves" "sheep-wolves-grass"
-0
+1
+
+SLIDER
+15
+270
+187
+303
+intelligence
+intelligence
+1
+20
+15.0
+1
+1
+NIL
+HORIZONTAL
 
 @#$#@#$#@
 ## WHAT IS IT?
