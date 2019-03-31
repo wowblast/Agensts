@@ -35,8 +35,9 @@ to setup
     set energy random (2 * sheep-gain-from-food)
     setxy random-xcor random-ycor
     set security 1
-    set leader 0
+    set leader self
     set group-number 1
+
 
   ]
 
@@ -67,11 +68,16 @@ to go
     ]
     reproduce-sheep  ; sheep reproduce at random rate governed by slider
     ;;;;;;;;;;;;;;
-    if color = red  [create-group]
+    happy-sheep
+    if color = red  [
+      ask sheep with [color = white] in-radius 5 [
+        create-group ]]
     follow-leader
     ;;;;;;;;;;;;;
   ]
+
   if any? sheep [ask one-of sheep with [color = white] [create-leaders]];; create leaders
+
   ;;ask sheep with [color = red][create-group  ]
 
 
@@ -105,7 +111,7 @@ to eat-grass  ; sheep procedure
   ; sheep eat grass, turn the patch brown
   if pcolor = green [
     set pcolor brown
-    set energy energy + sheep-gain-from-food  ; sheep gain energy by eating
+    set energy energy + sheep-gain-from-food / security  ; sheep gain energy by eating
   ]
 end
 
@@ -167,13 +173,14 @@ end
 
 to create-group
 
-  ask sheep in-radius 5
-      [ if security = 1 [set leader myself
-        move-to self]
-         ]
 
-  set security count sheep with [leader = self]
-  ask sheep with [leader = self][set security [security] of myself]
+  if security = 1 [set leader [leader] of myself
+        move-to myself]
+  ;create-links-with other sheep with [leader = [leader] of myself]
+
+  let new-security  count sheep with [leader = [leader] of myself]
+  set security new-security
+  ask sheep with [leader = [leader] of myself ][set security new-security]
 
 
 end
@@ -182,21 +189,19 @@ to create-leaders
   if random-float 200 < intelligence[
     set color red
 
-    set leader self]
+    ]
 
 end
-to set-numberOfTurtles
+to happy-sheep
 
-  ask patches [
-    ifelse count sheep-here > 0
-    [set plabel count turtles-here]
-    [set plabel ""]
-  ]
+  if sheep-gain-from-food / security < 2 and color = white [ set leader self
+  set security 1]
 
 end
 to follow-leader
 
-  if leader = nobody and security > 1 [ set security 1]
+  if leader = nobody and security > 1 [ set security 1
+  set leader  self]
 
 end
 
@@ -254,7 +259,7 @@ sheep-gain-from-food
 sheep-gain-from-food
 0.0
 50.0
-4.0
+18.0
 1.0
 1
 NIL
@@ -329,7 +334,7 @@ grass-regrowth-time
 grass-regrowth-time
 0
 100
-23.0
+52.0
 1
 1
 NIL
@@ -461,7 +466,7 @@ CHOOSER
 model-version
 model-version
 "sheep-wolves" "sheep-wolves-grass"
-0
+1
 
 SLIDER
 15
