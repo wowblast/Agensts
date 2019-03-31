@@ -45,6 +45,7 @@ to setup
     setxy random-xcor random-ycor
   ]
   display-labels
+
   reset-ticks
 end
 
@@ -62,7 +63,10 @@ to go
     ]
     reproduce-sheep  ; sheep reproduce at random rate governed by slider
   ]
-  ask one-of sheep [create-group]
+  ask one-of sheep [create-leaders];; create leaders
+  ask sheep with [color = red][create-group]
+
+
   ask wolves [
     move
     set energy energy - 1  ; wolves lose energy as they move
@@ -74,6 +78,7 @@ to go
   ; set grass count patches with [pcolor = green]
   tick
   display-labels
+   set-numberOfTurtles
 end
 
 to move  ; turtle procedure
@@ -148,12 +153,26 @@ end
 
 to create-group
 
-  if random-float 200 < intelligence[  ; throw "dice" to see if you will reproduce
-    set color red
+  ask turtles in-radius 5
+      [ set color blue ]
 
-  ]
+
 end
 
+to create-leaders
+  if random-float 200 < intelligence[
+    set color red]
+
+end
+to set-numberOfTurtles
+
+  ask patches [
+    ifelse count sheep-here > 0
+    [set plabel count turtles-here]
+    [set plabel ""]
+  ]
+
+end
 
 ; Copyright 1997 Uri Wilensky.
 ; See Info tab for full copyright and license.
@@ -284,7 +303,7 @@ grass-regrowth-time
 grass-regrowth-time
 0
 100
-100.0
+23.0
 1
 1
 NIL

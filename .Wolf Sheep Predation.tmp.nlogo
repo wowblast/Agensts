@@ -45,6 +45,7 @@ to setup
     setxy random-xcor random-ycor
   ]
   display-labels
+
   reset-ticks
 end
 
@@ -77,6 +78,7 @@ to go
   ; set grass count patches with [pcolor = green]
   tick
   display-labels
+   set-numberOfTurtles
 end
 
 to move  ; turtle procedure
@@ -151,18 +153,26 @@ end
 
 to create-group
 
-  ask turtles in-radius 2
-      [ set color red ]
+  ask turtles in-radius 5
+      [ set color blue ]
 
 
 end
 
 to create-leaders
   if random-float 200 < intelligence[
-    set color ]
+    set color red]
 
 end
+to set-numberOfTurtles
 
+  ask patches [
+    ifelse count -here > 0
+    [set plabel count turtles-here]
+    [set plabel ""]
+  ]
+
+end
 
 ; Copyright 1997 Uri Wilensky.
 ; See Info tab for full copyright and license.
