@@ -75,8 +75,8 @@ to go
     follow-leader
     ;;;;;;;;;;;;;
   ]
-
-  if any? sheep [ask one-of sheep with [color = white] [create-leaders]];; create leaders
+  let allsheep count sheep with [color = white]
+  if allsheep >  1 [ask one-of sheep with [color = white] [create-leaders]];; create leaders
 
   ;;ask sheep with [color = red][create-group  ]
 
@@ -186,7 +186,7 @@ to create-group
 end
 
 to create-leaders
-  if random-float 200 < intelligence[
+  if random-float 100 < intelligence[
     set color red
 
     ]
@@ -201,6 +201,8 @@ end
 to follow-leader
 
   if leader = nobody and security > 1 [ set security 1
+  set leader  self]
+  if color = red and 2 > count sheep with [leader = [leader] of myself]  [ set security 1
   set leader  self]
 
 end
@@ -244,7 +246,7 @@ initial-number-sheep
 initial-number-sheep
 0
 250
-24.0
+71.0
 1
 1
 NIL
@@ -259,7 +261,7 @@ sheep-gain-from-food
 sheep-gain-from-food
 0.0
 50.0
-18.0
+27.0
 1.0
 1
 NIL
@@ -289,7 +291,7 @@ initial-number-wolves
 initial-number-wolves
 0
 250
-158.0
+5.0
 1
 1
 NIL
@@ -304,7 +306,7 @@ wolf-gain-from-food
 wolf-gain-from-food
 0.0
 100.0
-20.0
+99.0
 1.0
 1
 NIL
@@ -319,7 +321,7 @@ wolf-reproduce
 wolf-reproduce
 0.0
 20.0
-5.0
+13.0
 1.0
 1
 %
@@ -334,7 +336,7 @@ grass-regrowth-time
 grass-regrowth-time
 0
 100
-52.0
+38.0
 1
 1
 NIL
@@ -477,7 +479,7 @@ intelligence
 intelligence
 1
 20
-20.0
+16.0
 1
 1
 NIL
