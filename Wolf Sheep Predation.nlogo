@@ -69,14 +69,15 @@ to go
     reproduce-sheep  ; sheep reproduce at random rate governed by slider
     ;;;;;;;;;;;;;;
     happy-sheep
-    if color = red  [
-      ask sheep with [color = white] in-radius 5 [
+    if color = red and security < limit-group-average and count sheep with [color = white] in-radius 3 > 2[
+
+      ask  sheep with [color = white] in-radius 3  [
         create-group ]]
     follow-leader
     ;;;;;;;;;;;;;
   ]
-  let allsheep count sheep with [color = white]
-  if allsheep >  1 [ask one-of sheep with [color = white] [create-leaders]];; create leaders
+  let chosensheep  one-of sheep with [color = white and leader = self ]
+  if chosensheep != nobody and max-leaders > count sheep with [color = red][ask chosensheep [create-leaders]];; create leaders
 
   ;;ask sheep with [color = red][create-group  ]
 
@@ -118,7 +119,7 @@ end
 to reproduce-sheep  ; sheep procedure
   if random-float 100 < sheep-reproduce [  ; throw "dice" to see if you will reproduce
     set energy (energy / 2)                ; divide energy between parent and offspring
-    hatch 1 [ rt random-float 360 fd 1 set color white ]   ; hatch an offspring and move it forward 1 step
+    hatch 1 [ rt random-float 360 fd 1 set color white set security 1 set leader self]   ; hatch an offspring and move it forward 1 step
   ]
 end
 
@@ -172,7 +173,6 @@ to display-labels
 end
 
 to create-group
-
 
   if security = 1 [set leader [leader] of myself
         move-to myself]
@@ -246,7 +246,7 @@ initial-number-sheep
 initial-number-sheep
 0
 250
-71.0
+99.0
 1
 1
 NIL
@@ -261,7 +261,7 @@ sheep-gain-from-food
 sheep-gain-from-food
 0.0
 50.0
-27.0
+11.0
 1.0
 1
 NIL
@@ -276,7 +276,7 @@ sheep-reproduce
 sheep-reproduce
 1.0
 20.0
-4.0
+1.0
 1.0
 1
 %
@@ -291,7 +291,7 @@ initial-number-wolves
 initial-number-wolves
 0
 250
-5.0
+15.0
 1
 1
 NIL
@@ -306,7 +306,7 @@ wolf-gain-from-food
 wolf-gain-from-food
 0.0
 100.0
-99.0
+42.0
 1.0
 1
 NIL
@@ -321,22 +321,22 @@ wolf-reproduce
 wolf-reproduce
 0.0
 20.0
-13.0
+3.0
 1.0
 1
 %
 HORIZONTAL
 
 SLIDER
-40
+5
 100
-252
+180
 133
 grass-regrowth-time
 grass-regrowth-time
 0
 100
-38.0
+51.0
 1
 1
 NIL
@@ -450,10 +450,10 @@ Wolf settings
 0
 
 SWITCH
-195
-270
-331
-303
+190
+100
+326
+133
 show-energy?
 show-energy?
 0
@@ -471,15 +471,56 @@ model-version
 1
 
 SLIDER
-15
-270
-187
-303
+5
+265
+177
+298
 intelligence
 intelligence
 1
 20
-16.0
+20.0
+1
+1
+NIL
+HORIZONTAL
+
+SLIDER
+180
+265
+350
+298
+limit-group-average
+limit-group-average
+5
+50
+40.0
+5
+1
+NIL
+HORIZONTAL
+
+MONITOR
+265
+305
+327
+350
+leaders
+count sheep with [color = red]
+17
+1
+11
+
+SLIDER
+195
+140
+335
+173
+max-leaders
+max-leaders
+1
+20
+20.0
 1
 1
 NIL
