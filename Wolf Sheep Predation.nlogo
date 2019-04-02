@@ -68,7 +68,7 @@ to go
     ]
     reproduce-sheep  ; sheep reproduce at random rate governed by slider
     ;;;;;;;;;;;;;;
-    happy-sheep
+
     if color = red and security < limit-group-average and count sheep with [color = white] in-radius 3 > 2[
 
       ask  sheep with [color = white] in-radius 3  [
@@ -79,6 +79,9 @@ to go
   let chosensheep  one-of sheep with [color = white and leader = self ]
   if chosensheep != nobody and max-leaders > count sheep with [color = red][ask chosensheep [create-leaders]];; create leaders
 
+  let whitesheep one-of sheep
+  if  whitesheep != nobody [
+    ask whitesheep [happy-sheep]]
   ;;ask sheep with [color = red][create-group  ]
 
 
@@ -246,7 +249,7 @@ initial-number-sheep
 initial-number-sheep
 0
 250
-99.0
+30.0
 1
 1
 NIL
@@ -261,7 +264,7 @@ sheep-gain-from-food
 sheep-gain-from-food
 0.0
 50.0
-50.0
+5.0
 5.0
 1
 NIL
@@ -276,7 +279,7 @@ sheep-reproduce
 sheep-reproduce
 1.0
 20.0
-3.0
+1.0
 1.0
 1
 %
@@ -291,7 +294,7 @@ initial-number-wolves
 initial-number-wolves
 0
 250
-15.0
+17.0
 1
 1
 NIL
@@ -306,7 +309,7 @@ wolf-gain-from-food
 wolf-gain-from-food
 0.0
 100.0
-42.0
+100.0
 1.0
 1
 NIL
@@ -321,7 +324,7 @@ wolf-reproduce
 wolf-reproduce
 0.0
 20.0
-3.0
+7.0
 1.0
 1
 %
@@ -336,7 +339,7 @@ grass-regrowth-time
 grass-regrowth-time
 0
 100
-76.0
+100.0
 1
 1
 NIL
@@ -395,6 +398,7 @@ PENS
 "sheep" 1.0 0 -612749 true "" "plot count sheep"
 "wolves" 1.0 0 -16449023 true "" "plot count wolves"
 "grass / 4" 1.0 0 -10899396 true "" "if model-version = \"sheep-wolves-grass\" [ plot count grass / 4 ]"
+"leaders" 1.0 0 -5298144 true "" "plot count sheep with [color = red] * 10"
 
 MONITOR
 41
@@ -520,7 +524,7 @@ max-leaders
 max-leaders
 1
 20
-9.0
+10.0
 1
 1
 NIL
