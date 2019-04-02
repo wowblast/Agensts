@@ -261,8 +261,8 @@ sheep-gain-from-food
 sheep-gain-from-food
 0.0
 50.0
-11.0
-1.0
+50.0
+5.0
 1
 NIL
 HORIZONTAL
@@ -276,7 +276,7 @@ sheep-reproduce
 sheep-reproduce
 1.0
 20.0
-1.0
+3.0
 1.0
 1
 %
@@ -336,7 +336,7 @@ grass-regrowth-time
 grass-regrowth-time
 0
 100
-51.0
+76.0
 1
 1
 NIL
@@ -493,8 +493,8 @@ SLIDER
 limit-group-average
 limit-group-average
 5
-50
-40.0
+25
+15.0
 5
 1
 NIL
@@ -520,7 +520,7 @@ max-leaders
 max-leaders
 1
 20
-20.0
+9.0
 1
 1
 NIL
