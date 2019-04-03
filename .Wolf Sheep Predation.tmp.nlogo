@@ -252,7 +252,7 @@ initial-number-sheep
 initial-number-sheep
 0
 250
-86.0
+30.0
 1
 1
 NIL
@@ -282,7 +282,7 @@ sheep-reproduce
 sheep-reproduce
 1.0
 20.0
-6.0
+1.0
 1.0
 1
 %
@@ -312,7 +312,7 @@ wolf-gain-from-food
 wolf-gain-from-food
 0.0
 100.0
-45.0
+100.0
 1.0
 1
 NIL
@@ -500,7 +500,7 @@ limit-group-average
 limit-group-average
 5
 25
-5.0
+15.0
 5
 1
 NIL
@@ -535,7 +535,7 @@ HORIZONTAL
 PLOT
 1185
 150
-1615
+1385
 300
 Gropus
 NIL
