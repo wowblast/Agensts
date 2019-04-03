@@ -215,9 +215,7 @@ to follow-leader
   set leader  self]
 
 end
-to feed-followers
-  ask sheep with [leader = [leader] of myself] [set energy energy + sheep-gain-from-food / security]
-end
+
 
 ; Copyright 1997 Uri Wilensky.
 ; See Info tab for full copyright and license.
@@ -273,7 +271,7 @@ sheep-gain-from-food
 sheep-gain-from-food
 0.0
 50.0
-15.0
+40.0
 5.0
 1
 NIL
@@ -288,7 +286,7 @@ sheep-reproduce
 sheep-reproduce
 1.0
 20.0
-5.0
+4.0
 1.0
 1
 %
@@ -318,7 +316,7 @@ wolf-gain-from-food
 wolf-gain-from-food
 0.0
 100.0
-77.0
+55.0
 1.0
 1
 NIL
@@ -506,7 +504,7 @@ limit-group-average
 limit-group-average
 5
 25
-20.0
+5.0
 5
 1
 NIL
@@ -532,7 +530,7 @@ max-leaders
 max-leaders
 1
 20
-20.0
+10.0
 1
 1
 NIL
@@ -604,8 +602,8 @@ sheep in groups  average
 PLOT
 1165
 315
-1505
-490
+1625
+500
 sheep in grouṕs average
 NIL
 NIL
