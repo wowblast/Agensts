@@ -72,8 +72,8 @@ to go
     ;;;;;;;;;;;;;;
 
     if color = red and security < limit-group-average and count sheep with [color = white] in-radius 3 > 2[
-
-      ask  sheep with [color = white] in-radius 3  [
+    let possible-sheep sheep with [color = white] in-radius 3
+      ask  one-of  possible-sheep [
         create-group ]]
     follow-leader
     ;;;;;;;;;;;;;
@@ -97,13 +97,14 @@ to go
   ]
   if model-version = "sheep-wolves-grass" [ ask patches [ grow-grass ] ]
   ; set grass count patches with [pcolor = green]
-  tick
   display-labels
+  tick
+
    ;set-numberOfTurtles
 end
 
 to move  ; turtle
-  ifelse breed = sheep [  ifelse leader != 0 and leader != nobody and leader != self  [move-to leader
+  ifelse breed = sheep [  ifelse leader != nobody and leader != self  [setxy [xcor] of leader [ycor] of leader
    ]
   [rt random 50
   lt random 50
@@ -117,7 +118,9 @@ end
 to eat-grass  ; sheep procedure
   ; sheep eat grass, turn the patch brown
   if pcolor = green [
+
     set pcolor brown
+    if color = red and security > 1 [ set pcolor green]
     set energy energy + sheep-gain-from-food / security  ; sheep gain energy by eating
   ]
 end
@@ -141,7 +144,7 @@ to eat-sheep  ; wolf procedure
 
  ; let ind_security [security] of  prey one-of sheep
   ; grab a random sheep
-  if prey != nobody and [security] of prey < 5  [                          ; did we get one?  if so,
+  if prey != nobody and [security] of prey < 4  [                          ; did we get one?  if so,
     ask prey [ die ]                            ; kill it, and...
     set energy energy + wolf-gain-from-food     ; get energy from eating
   ]
@@ -200,7 +203,7 @@ to create-leaders
 end
 to happy-sheep
 
-  if sheep-gain-from-food / security < 2 and color = white [ set leader self
+  if sheep-gain-from-food / security < 1 and color = white [ set leader self
   set security 1]
 
 end
@@ -212,18 +215,21 @@ to follow-leader
   set leader  self]
 
 end
+to feed-followers
+  ask sheep with [leader = [leader] of myself] [set energy energy + sheep-gain-from-food / security]
+end
 
 ; Copyright 1997 Uri Wilensky.
 ; See Info tab for full copyright and license.
 @#$#@#$#@
 GRAPHICS-WINDOW
-355
-10
-1138
-794
+380
+35
+898
+554
 -1
 -1
-15.2
+10.0
 1
 14
 1
@@ -252,7 +258,7 @@ initial-number-sheep
 initial-number-sheep
 0
 250
-30.0
+50.0
 1
 1
 NIL
@@ -282,7 +288,7 @@ sheep-reproduce
 sheep-reproduce
 1.0
 20.0
-1.0
+5.0
 1.0
 1
 %
@@ -297,7 +303,7 @@ initial-number-wolves
 initial-number-wolves
 0
 250
-17.0
+83.0
 1
 1
 NIL
@@ -312,7 +318,7 @@ wolf-gain-from-food
 wolf-gain-from-food
 0.0
 100.0
-100.0
+77.0
 1.0
 1
 NIL
@@ -327,7 +333,7 @@ wolf-reproduce
 wolf-reproduce
 0.0
 20.0
-7.0
+3.0
 1.0
 1
 %
@@ -342,7 +348,7 @@ grass-regrowth-time
 grass-regrowth-time
 0
 100
-100.0
+34.0
 1
 1
 NIL
@@ -500,7 +506,7 @@ limit-group-average
 limit-group-average
 5
 25
-15.0
+20.0
 5
 1
 NIL
@@ -526,7 +532,7 @@ max-leaders
 max-leaders
 1
 20
-9.0
+20.0
 1
 1
 NIL
@@ -535,7 +541,7 @@ HORIZONTAL
 PLOT
 1185
 150
-1385
+1615
 300
 Gropus
 NIL
@@ -594,6 +600,24 @@ sheep in groups  average
 17
 1
 11
+
+PLOT
+1165
+315
+1505
+490
+sheep in grouṕs average
+NIL
+NIL
+0.0
+10.0
+0.0
+10.0
+true
+true
+"" ""
+PENS
+"sheep in groups average" 1.0 0 -16777216 true "" "plot ( count sheep with [color = white and leader != self] + count sheep with [color = red] ) / actual-groups"
 
 @#$#@#$#@
 ## WHAT IS IT?
