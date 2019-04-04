@@ -97,8 +97,9 @@ to go
   ]
   if model-version = "sheep-wolves-grass" [ ask patches [ grow-grass ] ]
   ; set grass count patches with [pcolor = green]
-  display-labels
+
   tick
+   display-labels
 
    ;set-numberOfTurtles
 end
@@ -185,11 +186,9 @@ to create-group
 
   if security = 1 [set leader [leader] of myself
         move-to myself]
-  ;;create-links-with other sheep with [leader = [leader] of myself]
 
-  let new-security  count sheep with [leader = [leader] of myself]
-  set security new-security
-  ask sheep with [leader = [leader] of myself ][set security new-security]
+update-followers
+
 
 
 end
@@ -213,10 +212,13 @@ to follow-leader
   set leader  self]
   if color = red and 2 > count sheep with [leader = [leader] of myself]  [ set security 1
   set leader  self]
+  update-followers
 
 end
-to feed-followers
-  ask sheep with [leader = [leader] of myself] [set energy energy + sheep-gain-from-food / security]
+to update-followers
+ let new-security  count sheep with [leader = [leader] of myself]
+  set security new-security
+  ask sheep with [leader = [leader] of myself ][set security new-security]
 end
 
 ; Copyright 1997 Uri Wilensky.
@@ -258,7 +260,7 @@ initial-number-sheep
 initial-number-sheep
 0
 250
-50.0
+86.0
 1
 1
 NIL
@@ -273,7 +275,7 @@ sheep-gain-from-food
 sheep-gain-from-food
 0.0
 50.0
-40.0
+20.0
 5.0
 1
 NIL
@@ -288,7 +290,7 @@ sheep-reproduce
 sheep-reproduce
 1.0
 20.0
-4.0
+6.0
 1.0
 1
 %
@@ -303,7 +305,7 @@ initial-number-wolves
 initial-number-wolves
 0
 250
-83.0
+17.0
 1
 1
 NIL
@@ -318,7 +320,7 @@ wolf-gain-from-food
 wolf-gain-from-food
 0.0
 100.0
-55.0
+45.0
 1.0
 1
 NIL
@@ -333,7 +335,7 @@ wolf-reproduce
 wolf-reproduce
 0.0
 20.0
-3.0
+7.0
 1.0
 1
 %
@@ -348,7 +350,7 @@ grass-regrowth-time
 grass-regrowth-time
 0
 100
-34.0
+66.0
 1
 1
 NIL
@@ -532,7 +534,7 @@ max-leaders
 max-leaders
 1
 20
-10.0
+9.0
 1
 1
 NIL
