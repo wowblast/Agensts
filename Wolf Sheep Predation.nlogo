@@ -57,7 +57,7 @@ end
 
 to go
   ; stop the simulation of no wolves or sheep
-  set actual-groups 0
+
   if not any? turtles [ stop ]
   ; stop the model if there are no wolves and the number of sheep gets very large
   if not any? wolves and count sheep > max-sheep [ user-message "The sheep have inherited the earth" stop ]
@@ -79,7 +79,9 @@ to go
     ;;;;;;;;;;;;;
   ]
   let chosensheep  one-of sheep with [color = white and leader = self ]
+  set actual-groups 0
   if chosensheep != nobody and max-leaders > count sheep with [color = red][ask chosensheep [create-leaders]];; create leaders
+
   ask sheep with [color = red] [
     if count sheep with [color = white and leader = [leader] of myself] > 0 [set actual-groups actual-groups + 1]]
   let whitesheep one-of sheep
@@ -260,7 +262,7 @@ initial-number-sheep
 initial-number-sheep
 0
 250
-86.0
+142.0
 1
 1
 NIL
@@ -275,7 +277,7 @@ sheep-gain-from-food
 sheep-gain-from-food
 0.0
 50.0
-20.0
+5.0
 5.0
 1
 NIL
@@ -290,7 +292,7 @@ sheep-reproduce
 sheep-reproduce
 1.0
 20.0
-6.0
+2.0
 1.0
 1
 %
@@ -305,7 +307,7 @@ initial-number-wolves
 initial-number-wolves
 0
 250
-17.0
+95.0
 1
 1
 NIL
@@ -350,7 +352,7 @@ grass-regrowth-time
 grass-regrowth-time
 0
 100
-66.0
+99.0
 1
 1
 NIL
@@ -508,7 +510,7 @@ limit-group-average
 limit-group-average
 5
 25
-5.0
+10.0
 5
 1
 NIL
@@ -534,17 +536,17 @@ max-leaders
 max-leaders
 1
 20
-9.0
+8.0
 1
 1
 NIL
 HORIZONTAL
 
 PLOT
-1185
-150
-1615
-300
+905
+85
+1335
+235
 Gropus
 NIL
 NIL
@@ -560,10 +562,10 @@ PENS
 "sheep alone" 1.0 0 -15390905 true "" "plot count sheep with [color = white and leader = self]"
 
 MONITOR
-1175
-75
-1277
-120
+905
+35
+1007
+80
 groups 
 actual-groups
 17
@@ -571,10 +573,10 @@ actual-groups
 11
 
 MONITOR
-1295
-75
-1387
-120
+1010
+35
+1102
+80
 sheep alone
 count sheep with [color = white and leader = self]
 17
@@ -582,10 +584,10 @@ count sheep with [color = white and leader = self]
 11
 
 MONITOR
-1400
-75
-1512
-120
+1105
+35
+1217
+80
 sheep together
 count sheep with [color = white and leader != self] + count sheep with [color = red]
 17
@@ -593,10 +595,10 @@ count sheep with [color = white and leader != self] + count sheep with [color = 
 11
 
 MONITOR
-1525
-75
-1707
-120
+1220
+35
+1402
+80
 sheep in groups  average
 ( count sheep with [color = white and leader != self] + count sheep with [color = red] ) / actual-groups
 17
@@ -604,10 +606,10 @@ sheep in groups  average
 11
 
 PLOT
-1165
-315
-1625
-500
+910
+240
+1370
+425
 sheep in grouṕs average
 NIL
 NIL
